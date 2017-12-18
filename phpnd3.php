@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Namu darbas nr 2</title>
+    <title>Namu darbas nr 3</title>
 </head>
 <body>
 <?php
@@ -31,7 +31,7 @@ return $rez;
 
 function skirtumas (int $sk1, $sk2)
 {
-    /*if ($sk1 > $sk2) {
+    /**if ($sk1 > $sk2) {
         return $sk1 - $sk2;
     } else {
         return $sk2 - $sk1;
@@ -51,19 +51,44 @@ echo "Ju skirtumas yra " . $skir. "<br>";
 // Surasti tobulus skaicius intervale nuo 1 iki 1000
 // Dalinkliu radimui ir tikrinimui sukurti atskiras funkcijas
 
+/** 
 for ($i=1; $i < 1001 ; $i++) {
     $x = $i;
-    for ($j=$x-1; $j == 1; $j--) { 
+    $sum = 0;
+    for ($j=($x-1); $j == 1; $j--) { //Neveikia
         $y = $x/($x-$j);
         if (is_int ($y)) {
-            $sum += $y; 
+            $sum = $sum + ($x-$j); 
             }
         }
     
     if ($x == $sum) {
         echo $x;
-    } 
+    }
 }
+*/
+$y = 6;
+$x = [5, 4, 3, 2, 1];
+$sum = 0;
+
+for ($i=0; $i < count ($x) ; $i++) { 
+    $tikrinu = $y / $x[$i];
+    if (is_int($tikrinu)) {
+        $sum += $x[$i];
+    }
+    if ($sum == $y) {
+        echo $y;
+    }
+}
+
+$a = 1;
+while ($a <= 1000) {
+
+
+
+    
+}
+
 
 
 
