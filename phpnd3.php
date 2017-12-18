@@ -44,6 +44,8 @@ $vid1 =  vidurkis ($a);
 $vid2 =  vidurkis ($b);
 $skir = skirtumas ($vid1, $vid2);
 
+echo "<h1> Pirmas uzdavinys </h1>";
+
 echo "Pirmo masyvo vidurkis yra " . $vid1 . "<br>";
 echo "Antro masyvo vidurkis yra " . $vid2 . "<br>";
 echo "Ju skirtumas yra " . $skir. "<br>";
@@ -51,46 +53,60 @@ echo "Ju skirtumas yra " . $skir. "<br>";
 // Surasti tobulus skaicius intervale nuo 1 iki 1000
 // Dalinkliu radimui ir tikrinimui sukurti atskiras funkcijas
 
-/** 
-for ($i=1; $i < 1001 ; $i++) {
-    $x = $i;
-    $sum = 0;
-    for ($j=($x-1); $j == 1; $j--) { //Neveikia
-        $y = $x/($x-$j);
-        if (is_int ($y)) {
-            $sum = $sum + ($x-$j); 
-            }
-        }
-    
-    if ($x == $sum) {
-        echo $x;
-    }
-}
-*/
-$y = 6;
-$x = [5, 4, 3, 2, 1];
-$sum = 0;
-
-for ($i=0; $i < count ($x) ; $i++) { 
-    $tikrinu = $y / $x[$i];
-    if (is_int($tikrinu)) {
-        $sum += $x[$i];
-    }
-    if ($sum == $y) {
-        echo $y;
-    }
-}
-
+/** Suranda tobulus skaicius iki pateikto skaiciaus ir patalpina i array*/
+function tobuliSkaiciai(int $var = 1000)
+{
 $a = 1;
-while ($a <= 1000) {
-
-
-
-    
+$atsakymas = [];
+$elementoNr = 0;
+while ($a <= $var) {
+    $sum = 0;
+    for ($i=1; $i < $a; $i++) {
+        $arDalinas = $a / $i;
+        if (is_int($arDalinas)) {
+            $sum += $i;
+        }
+    }
+    if ($sum == $a) {
+        $atsakymas[$elementoNr] = $a;
+        $elementoNr++; 
+    }
+    $a++;
+}
+//var_dump ($atsakymas);
+return $atsakymas;
 }
 
+/** Suranda pateikto masyvo visu skaiciu daliklius */
 
+function dalikliai (array $array) 
+{
+    for ($i=0; $i < count($array); $i++) {
+        echo "Skaiciaus " . $array[$i] . " dalikliai: ";
+        for ($j=1; $j < $array[$i]; $j++) { 
+        $arDalinas = $array[$i] / $j;
+        if (is_int($arDalinas)) {
+            echo $j . " ";
+    }
+    }
+    echo"<br>";
+}
+}
 
+echo "<h1> Antras uzdavinys </h1>";
+
+//Ieskome tobulu skaiciu default iki 1000
+$tobuliSkaiciai = tobuliSkaiciai();
+echo "Tobulieji skaiciai intervale: 0 - 1000 yra: ";
+
+//Spausdiname rastus skaicius
+foreach ($tobuliSkaiciai as $x) {
+    echo $x . " ";
+}
+echo "<br>";
+
+//Spausdiname ju daliklius
+dalikliai($tobuliSkaiciai);
 
 ?>
 </body>
