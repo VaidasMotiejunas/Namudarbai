@@ -96,7 +96,7 @@ function dalikliai (array $array)
 echo "<h1> Antras uzdavinys </h1>";
 
 //Ieskome tobulu skaiciu default iki 1000
-$tobuliSkaiciai = tobuliSkaiciai();
+$tobuliSkaiciai = tobuliSkaiciai(1000);
 echo "Tobulieji skaiciai intervale: 0 - 1000 yra: ";
 
 //Spausdiname rastus skaicius

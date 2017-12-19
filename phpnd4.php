@@ -120,58 +120,18 @@ $c = [
     ],
 ];
 
-/**
-$c[0][0] + $c[1][0] + $c[2][0] + $c[3][0]; ir t.t
-$c[0][1] + $c[1][1] + $c[2][1] + $c[3][1]; ir t.t
-$c[0][2] + $c[1][2] + $c[2][2] + $c[3][2]; ir t.t
-$c[0][3] + $c[1][3] + $c[2][3] + $c[3][3]; ir t.t
-*/
-
-$maxEilute = max (array_keys ($c[0]));
-foreach ($c as $key => $value) {
-    $x = (max (array_keys ($c[$key])));
-    if ($x > $maxEilute) {
-        $maxEilute = $x;
+$rezArray = [];
+foreach ($c as $d) {
+    foreach ($d as $key => $value) {
+        if (isset ($rezArray[$key])) {
+        $rezArray[$key] += $value;
+    } else {
+        $rezArray[$key] = $value;
     }
 }
-echo $maxEilute;
-echo "<br>";
-
-$eilutesSuma = 0;
-
-for ($j=0; $j <= $maxEilute; $j++) {
-    for ($i=0; $i < count($c); $i++) { 
-        $eilutesSuma += $c[$j][$i];
-    }
 }
 
-for ($i=0; $i <= $maxEilute; $i++) {
-    $eilutesSuma = 0;
-    for ($j=0; $j < count($c); $j++) {
-        if ($c[$j][$i] == NULL) {
-            $c[$j][$i] = 0;
-            $eilutesSuma += $c[$j][$i];
-        } else {
-        $eilutesSuma += $c[$j][$i];
-        }
-    }
-}var_dump($eilutesSuma);
-
-
-//var_dump (array_keys ($c));
-
-/*
-$belekas = arrayMaxKeyValue($c);
-var_dump($belekas);
-*/
-
-/*
-for ($i=0; $i < count($b); $i++) { 
-    for ($j=0; $j < count($b[??]); $j++) { //TODO sugalvoti riba 
-        # code...
-    }
-}
-*/
+echo max ($rezArray);
 
 ?>
 </body>
