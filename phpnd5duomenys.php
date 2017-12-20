@@ -58,6 +58,6 @@ $mokiniai = [
     ], 
 ];
 
-var_dump($zmones);
+//var_dump($zmones);
 echo"<br>";
-var_dump($mokiniai);
+//var_dump($mokiniai);

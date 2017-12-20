@@ -1,4 +1,4 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,8 +8,12 @@
 </head>
 <body>
 <?php
+echo "<h1>Uzduotis nr 1</h1>";
 
+require 'phpnd5duomenys.php';
+require 'phpnd5funkcijos.php';
 
+pairMenAndWomen($zmones);
 
 
 
