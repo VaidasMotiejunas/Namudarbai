@@ -124,9 +124,9 @@ $rezArray = [];
 foreach ($c as $d) {
     foreach ($d as $key => $value) {
         if (isset ($rezArray[$key])) {
-        $rezArray[$key] += $value;
+        $rezArray[$key] += $value; //Jei egzistuoja pridedame prie ats masyvo reiksmes duoto masyvo reiksme
     } else {
-        $rezArray[$key] = $value;
+        $rezArray[$key] = $value; // jei neegzistuoja tada ats masyvo reiksme prilyginama duoto masyvo reiksmei 
     }
 }
 }
