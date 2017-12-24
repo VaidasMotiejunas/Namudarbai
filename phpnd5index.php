@@ -14,6 +14,8 @@ require 'phpnd5duomenys.php';
 require 'phpnd5funkcijos.php';
 
 pairMenAndWomen($zmones);
+echo "<h1>Uzduotis nr 2</h1>";
+groupOfThree($zmones);
 
 
 
