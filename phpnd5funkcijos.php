@@ -23,7 +23,7 @@ foreach ($vyrai as $vyrReiksme) {
     }
 }
 }
-
+//Prints all possible pairs off three persons from provided array
 function groupOfThree (array $array){
     //Finds all possible groups of three. a+b+c != a+c+b
     $groups = [];
@@ -48,7 +48,7 @@ function groupOfThree (array $array){
                 $i++;
         }
     }
-    //Rearanges all possible groups in ascending order.
+    //Rearanges all groups in ascending order.
     for ($i=0; $i < count($groups2); $i++) { 
         array_multisort($groups2[$i], SORT_ASC, SORT_STRING);
      }
@@ -70,4 +70,35 @@ function groupOfThree (array $array){
         echo "<br>";
     }
 }
+
+//Prints the name and an average mark of the student with the best average mark of provided array
+function bestPupil (array $pupils){
+
+    $pupilsAveRez = [];
+    $pupilsNames = [];
+    $pupilsNamesAndAveRez = [];
+
+    //Calculates the average mark of all lessons
+    //fills two arrays with names and marks
+    foreach ($pupils as $pupilInfo) {
+        $pupilsNames[] = $pupilInfo['vardas'];
+        $averageOfAllRez = 0;
+        foreach ($pupilInfo['pazymiai'] as $lesson => $marks) {
+            $averageRez = 0;
+            foreach ($marks as $mark) {
+                $averageRez += $mark;
+            }
+            $averageRez /= count($marks);
+            $averageOfAllRez += $averageRez;
+        }
+        $averageOfAllRez /= count ($pupilInfo['pazymiai']);
+        $pupilsAveRez[] = round($averageOfAllRez, 2);
+    }
+    //combines two arrays and finds the bigest average mark, then finds which student that mark belongs to
+    $pupilsNamesAndAveRez = array_combine ($pupilsNames, $pupilsAveRez); //Gal galima gudriau rast max value ir atspausdint kartu su key???
+    $maxRez = max($pupilsNamesAndAveRez);
+    $bestPupil = array_search($maxRez, $pupilsNamesAndAveRez);
+    echo "Siais metais geriausiai mokesi: " . $bestPupil . " jo(s) bendras vidurkis yra: " . $maxRez;
+}
+
 ?>
