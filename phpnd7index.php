@@ -61,7 +61,11 @@ $sortedMokiniai2 = sortByAge ($mokiniai);
 </table>
 
 <h1>Namu darbas nr 7</h1>
-
+<!--
+Papildyti Mokinys klase gimimo 
+Sukurti Mokinio klasei metoda kiekMetu
+Atspausdinti tik tuos mokinius, kuriem virs 18
+-->
 <table>
 <thead>
 <tr>
