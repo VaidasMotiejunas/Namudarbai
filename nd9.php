@@ -1,28 +1,44 @@
 <?php
 
-if (!($_REQUEST['dateOfEvent']) && !($_REQUEST['plateNumber']) && !($_REQUEST['distance']) && !($_REQUEST['time'])) {
-    echo "Prasome uzpildyti visus laukus";
+if (!($_REQUEST['dateOfEvent']) || !($_REQUEST['plateNumber']) || !($_REQUEST['distance']) || !($_REQUEST['time'])) {
+    header("Location: {$_SERVER['HTTP_REFERER']}"); //Grazina i pries tai buvusi psl.
+exit; //Kaip parasyti alerta???
 }
 
-$obj1 = new Radar (new DateTime($_REQUEST['dateOfEvent']), $_REQUEST['plateNumber'], $_REQUEST['distance'], $_REQUEST['time']); 
+if (isset($_REQUEST['plateNumber'])) {
+    setcookie('plateNumber', $_REQUEST['plateNumber']);
+} else {
+    echo "Neivestas automobilio valstybinis numeris"; //Neraso, nes header("Location: {$_SERVER['HTTP_REFERER']}"); grazina i pries tai buvusi psl
+}
 
-setcookie('plateNumber', $obj1->number);
-setcookie('dateOfEvent', $obj1->date->format('Y-m-d'));
-setcookie('distance', $obj1->distance);
-setcookie('time', $obj1->time);
-//var_dump($_COOKIE);
+if (isset($_REQUEST['dateOfEvent'])) {
+    setcookie('dateOfEvent', $_REQUEST['dateOfEvent']);
+} else {
+    echo "Neivesta ivykio data";
+}
+
+if (isset($_REQUEST['distance'])) {
+    setcookie('distance', $_REQUEST['distance']);
+} else {
+    echo "Neivesta distancija";
+}
+
+if (isset($_REQUEST['time'])) {
+    setcookie('time', $_REQUEST['time']);
+} else {
+    echo "Neivestas laikas";
+}
 
 class Radar
 {
-    public $date; //data ir laikas
-    public $number; //automobilio numeris
+    public $dateOfEvent; //data ir laikas
+    public $plateNumber; //automobilio numeris
     public $distance; //nuvaziuotas atstumas metrais
     public $time; //sugaistas laikas
-    public static $objArray=[];
 
-    public function __construct(DateTime $date, string $number,float $distance,float $time){
-        $this->date = $date;
-        $this->number = $number;
+    public function __construct(DateTime $dateOfEvent, string $plateNumber,float $distance,float $time){
+        $this->dateOfEvent = $dateOfEvent;
+        $this->plateNumber = $plateNumber;
         $this->distance = $distance;
         $this->time = $time;
     }
@@ -38,6 +54,9 @@ class Radar
     }
 }
 
+function 
+
+//$obj1 = new Radar (new DateTime($_REQUEST['dateOfEvent']), $_REQUEST['plateNumber'], $_REQUEST['distance'], $_REQUEST['time']); 
 
 /*
 $objArray = [

@@ -79,6 +79,9 @@
     <title>Namu darbas nr 9</title>
 </head>
 <body>
+<?php 
+require 'nd9.php';
+?>
 <h1>Automobiliu registracija</h1>
 
 <div>
