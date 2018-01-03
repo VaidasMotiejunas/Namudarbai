@@ -75,11 +75,11 @@
     <title>Namu darbas nr 9</title>
 </head>
 <body>
-<?php require 'nd91.php'; ?>
+<?php require 'nd9.php'; ?>
 <h1>Automobiliu registracija</h1>
 
 <div>
-    <form action ="nd91index.php" method ="post">
+    <form action ="nd9index.php" method ="post">
         <label for = "data">Ivykio data</label>
         <input id = "data" name ="dateOfEvent" type = "date" placeholder = "Iveskite ivykio data"> <br>
         <label for = "numeris">Valstybinis automobilio numeris</label>
@@ -103,7 +103,7 @@ if (!isset($_COOKIE)) {
 
 if (!($_REQUEST['dateOfEvent']) || !($_REQUEST['plateNumber']) || !($_REQUEST['distance']) || !($_REQUEST['time'])) {
     echo "Uzpildykite visus laukelius";
-    //header("Location: {$_SERVER['HTTP_REFERER']}"); //Grazina i pries tai buvusi psl.
+    //header("Location: {$_SERVER['HTTP_REFERER']}"); //Grazina i pries tai buvusi psl. Neveikia kai tam paciam faile
 } else {
     setcookie($cookieId.'plateNumber', $_REQUEST['plateNumber']);
     setcookie($cookieId.'dateOfEvent', $_REQUEST['dateOfEvent']);
@@ -119,13 +119,16 @@ for ($i=0; $i < count($_COOKIE)/4; $i++) {
 usort ($eventObj, function ($a, $b) { //Jei naudoju sortEvents nerusiuoja array.
     return ($a->getSpeed() < $b->getSpeed()); 
 });
+// sortEvents ($eventObj); Neveikia 
+// var_dump ($eventObj);
+
 ?>
 <table>
 <thead>
 <tr>
     <td>Ivykio data</td>
     <td>Valstybinis numeris</td>
-    <td>Uzfiksuotas greitis</td>
+    <td>Uzfiksuotas greitis, km/h</td>
 </tr>
 </thead>
 <tbody>
@@ -138,7 +141,7 @@ foreach ($eventObj as $radar) {
             <td>$radar->plateNumber</td>
             <td>$speed</td>
         </tr>";
-} //treciam <td> neleidzia naudoti $radar->getSpeed();
+} //Neleidzia naudoti <td>$radar->getSpeed()</td>
 ?>
 </table>
 </body>
