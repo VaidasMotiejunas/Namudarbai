@@ -2,63 +2,75 @@
 <html lang="en">
 <head>
 <style>
-h1 {
-    text-align: center;
-    font-size: 25px;
-    text-shadow: 0px 0px 2px white;
-}
-input[type=text], select {
-    width: 100%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-input[type=date], select {
-    width: 100%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-input[type=number], select {
-    width: 100%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
+    h1 {
+        text-align: center;
+        font-size: 25px;
+        text-shadow: 0px 0px 2px white;
+    }
+    input[type=text], select {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }   
+    input[type=date], select {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box; 
+    }
+    input[type=number], select {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
 
-input[type=submit] {
-    width: 100%;
-    background-color: #4CAF50;
-    color: white;
-    padding: 14px 20px;
-    margin: 8px 0;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
+    input[type=submit] {
+        width: 100%;
+        background-color: #4CAF50;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
 
-input[type=submit]:hover {
-    background-color: #45a049;
-}
+    input[type=submit]:hover {
+        background-color: #45a049;
+    }
 
-div {
-    border-radius: 5px;
-    background-color: #f2f2f2;
-    padding: 20px;
-}
-body {
-    background: url("https://ifoto.delfi.lt/show_display.php?id=7328136&width=1200&height=1200&mode=-1") left top;
-    background-size: 225px 150px;
-}
+    div {
+        border-radius: 5px;
+        background-color: #f2f2f2;
+        padding: 20px;
+    }
+    body {
+        background: url("https://ifoto.delfi.lt/show_display.php?id=7328136&width=1200&height=1200&mode=-1") left top;
+        background-size: 225px 150px;
+    }
+    table {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        border-radius: 5px;
+        background-color: #f2f2f2;
+        padding: 20px;
+    }
 
 </style>
     <meta charset="UTF-8">
@@ -82,6 +94,20 @@ body {
         <input type ="submit" value = "Ivesti duomenis">
     </form>
 </div>
+<br>
+
+<table>
+<thead>
+<tr>
+    <td>Ivykio data</td>
+    <td>Valstybinis numeris</td>
+    <td>Uzfiksuotas greitis</td>
+</tr>
+</thead>
+<tbody>
+<?php ?>
+</tbody>
+</table>
 
 
 </body>

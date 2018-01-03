@@ -1,5 +1,9 @@
 <?php
 
+if (!($_REQUEST['dateOfEvent']) && !($_REQUEST['plateNumber']) && !($_REQUEST['distance']) && !($_REQUEST['time'])) {
+    echo "Prasome uzpildyti visus laukus";
+}
+
 $obj1 = new Radar (new DateTime($_REQUEST['dateOfEvent']), $_REQUEST['plateNumber'], $_REQUEST['distance'], $_REQUEST['time']); 
 
 setcookie('plateNumber', $obj1->number);
@@ -32,18 +36,8 @@ class Radar
         $time = $this->time;
         return round($speed = $distance / $time * 3.6, 1);
     }
-
-    public function addEvent($obj){
-        self::$objArray[] = $obj;
-    }
-
-    public function allEvents(){
-        return self::$objArray;
-    }
 }
 
-$obj1->addEvent($obj1);
-var_dump(Radar::allEvents());
 
 /*
 $objArray = [
@@ -64,3 +58,4 @@ foreach ($objArray as $radar) {
     echo "<br>";
 }
 */
+?>
