@@ -24,8 +24,9 @@ class Radar
 //Neveikia
 function sortEvents (array $array){
     usort ($array, function ($a, $b) {
-        return ($a->getSpeed() < $b->getSpeed()); 
+        return ($a->getSpeed() > $b->getSpeed()); 
     });
+    return $array;
 }
 
 ?>

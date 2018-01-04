@@ -100,10 +100,10 @@ if (!isset($_COOKIE)) {
 } else {
     $cookieId = count($_COOKIE) / 4;
 }
-
 if (!($_REQUEST['dateOfEvent']) || !($_REQUEST['plateNumber']) || !($_REQUEST['distance']) || !($_REQUEST['time'])) {
     echo "Uzpildykite visus laukelius";
-    //header("Location: {$_SERVER['HTTP_REFERER']}"); //Grazina i pries tai buvusi psl. Neveikia kai tam paciam faile
+    return;
+    //header("Location: {$_SERVER['HTTP_REFERER']}"); //Grazina i pries tai buvusi psl. Neveikia kai tam paciam faile, kodel?
 } else {
     setcookie($cookieId.'plateNumber', $_REQUEST['plateNumber']);
     setcookie($cookieId.'dateOfEvent', $_REQUEST['dateOfEvent']);
@@ -116,11 +116,12 @@ for ($i=0; $i < count($_COOKIE)/4; $i++) {
     array_push ($eventObj, new Radar($_COOKIE[$i.'plateNumber'], $_COOKIE[$i.'dateOfEvent'], $_COOKIE[$i.'distance'], $_COOKIE[$i.'time']));
 }
 
-usort ($eventObj, function ($a, $b) { //Jei naudoju sortEvents nerusiuoja array.
-    return ($a->getSpeed() < $b->getSpeed()); 
-});
-// sortEvents ($eventObj); Neveikia 
+// usort ($eventObj, function ($a, $b) { //Jei naudoju sortEvents nerusiuoja array.
+//     return ($a->getSpeed() < $b->getSpeed()); 
+// });
+$eventObj =  sortEvents ($eventObj);
 // var_dump ($eventObj);
+
 
 ?>
 <table>
@@ -135,13 +136,15 @@ usort ($eventObj, function ($a, $b) { //Jei naudoju sortEvents nerusiuoja array.
 </tbody>
 <?php
 foreach ($eventObj as $radar) {
+    //var_dump ($radar->getSpeed()); die;
     $speed = round($radar->distance / $radar->time * 3.6, 1);
     echo "<tr>
             <td>$radar->dateOfEvent</td>
             <td>$radar->plateNumber</td>
             <td>$speed</td>
+            <td>{$radar->getSpeed()}</td>
         </tr>";
-} //Neleidzia naudoti <td>$radar->getSpeed()</td>
+} // Norint iskviesti funkcija reik {}
 ?>
 </table>
 </body>
