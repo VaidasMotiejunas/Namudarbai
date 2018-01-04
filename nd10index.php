@@ -71,6 +71,12 @@
         border-radius: 5px;
         background-color: #f2f2f2;
         padding: 20px;
+        border-collapse: collapse;
+    }
+    th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+        padding: 10px;
     }
 
 </style>
