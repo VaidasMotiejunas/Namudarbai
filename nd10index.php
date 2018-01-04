@@ -108,11 +108,13 @@
 
 <?php 
 
+//Sukuria id cookiams, kad neirasytu informacijos ant virsaus
 if (!isset($_COOKIE)) {
     $cookieId = 0;
 } else {
     $cookieId = count($_COOKIE) / 4;
 }
+//Tikrina ar visi langeliai uzpildyti, jei taip sukuria cookius
 if (!($_REQUEST['dateOfEvent']) || !($_REQUEST['plateNumber']) || !($_REQUEST['distance']) || !($_REQUEST['time'])) {
     echo "<h2>Uzpildykite visus laukelius</h2>";
     return;
@@ -124,11 +126,13 @@ if (!($_REQUEST['dateOfEvent']) || !($_REQUEST['plateNumber']) || !($_REQUEST['d
     setcookie($cookieId.'time', $_REQUEST['time']);
 }
 
+//Is visu cookiu sukuriami Radar klases objektai ir patalpina i masyva
 $eventObj = [];
 for ($i=0; $i < count($_COOKIE)/4; $i++) {
     array_push ($eventObj, new Radar($_COOKIE[$i.'plateNumber'], $_COOKIE[$i.'dateOfEvent'], $_COOKIE[$i.'distance'], $_COOKIE[$i.'time']));
 }
 
+//Naudojama sortEvents funkcija surusiuoti masyve esancius objektus pagal greiti 
 $eventObj = sortEvents ($eventObj);
 
 ?>
@@ -143,6 +147,7 @@ $eventObj = sortEvents ($eventObj);
 <tbody>
 </tbody>
 <?php
+//Tikrinama ar yra ivestas filtras. Ne: isveda visas masyvo reiksmes. Taip: isveda masyvo reiksmes, kurios sutampa su filtru
 if ($_REQUEST['filter'] == "") {
     foreach ($eventObj as $events) {
         echo "<tr>
