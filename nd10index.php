@@ -7,6 +7,11 @@
         font-size: 25px;
         text-shadow: 0px 0px 2px white;
     }
+    h2 {
+        text-align: center;
+        font-size: 15px;
+        text-shadow: 0px 0px 2px white;
+    }
     input[type=text], select {
         width: 100%;
         padding: 12px 20px;
@@ -75,11 +80,11 @@
     <title>Namu darbas nr 9</title>
 </head>
 <body>
-<?php require 'nd91.php'; ?>
+<?php require 'nd10.php'; ?>
 <h1>Automobiliu registracija</h1>
 
 <div>
-    <form action ="nd91index.php" method ="post">
+    <form action ="nd10index.php" method ="post">
         <label for = "data">Ivykio data</label>
         <input id = "data" name ="dateOfEvent" type = "date" placeholder = "Iveskite ivykio data"> <br>
         <label for = "numeris">Valstybinis automobilio numeris</label>
@@ -88,6 +93,8 @@
         <input id = "distancija" name ="distance" type = "number" placeholder = "Iveskite nuvaziuota distancija metrais"> <br>
         <label for = "laikas">Sugaistas laikas</label>
         <input id = "laikas" name ="time" type = "number" placeholder = "Iveskite sugaista laika sekundemis"> <br>
+        <label for = "filtras">Duomenu filtravimas</label>
+        <input id = "filtras" name ="filter" type = "text" placeholder = "Iveskite valstybini automobilio nr ar jo dali"> <br>
         <input type ="submit" value = "Ivesti duomenis">
     </form>
 </div>
@@ -100,10 +107,10 @@ if (!isset($_COOKIE)) {
 } else {
     $cookieId = count($_COOKIE) / 4;
 }
-
 if (!($_REQUEST['dateOfEvent']) || !($_REQUEST['plateNumber']) || !($_REQUEST['distance']) || !($_REQUEST['time'])) {
-    echo "Uzpildykite visus laukelius";
-    //header("Location: {$_SERVER['HTTP_REFERER']}"); //Grazina i pries tai buvusi psl.
+    echo "<h2>Uzpildykite visus laukelius</h2>";
+    return;
+    //header("Location: {$_SERVER['HTTP_REFERER']}"); //Grazina i ta pati psl, tada vel neguna reiksmes ir taip be galo. Neveikia siuo atveju. 
 } else {
     setcookie($cookieId.'plateNumber', $_REQUEST['plateNumber']);
     setcookie($cookieId.'dateOfEvent', $_REQUEST['dateOfEvent']);
@@ -116,29 +123,41 @@ for ($i=0; $i < count($_COOKIE)/4; $i++) {
     array_push ($eventObj, new Radar($_COOKIE[$i.'plateNumber'], $_COOKIE[$i.'dateOfEvent'], $_COOKIE[$i.'distance'], $_COOKIE[$i.'time']));
 }
 
-usort ($eventObj, function ($a, $b) { //Jei naudoju sortEvents nerusiuoja array.
-    return ($a->getSpeed() < $b->getSpeed()); 
-});
+$eventObj = sortEvents ($eventObj);
+
 ?>
 <table>
 <thead>
 <tr>
     <td>Ivykio data</td>
     <td>Valstybinis numeris</td>
-    <td>Uzfiksuotas greitis</td>
+    <td>Uzfiksuotas greitis, km/h</td>
 </tr>
 </thead>
 <tbody>
 </tbody>
 <?php
-foreach ($eventObj as $radar) {
-    $speed = round($radar->distance / $radar->time * 3.6, 1);
-    echo "<tr>
-            <td>$radar->dateOfEvent</td>
-            <td>$radar->plateNumber</td>
-            <td>$speed</td>
-        </tr>";
-} //treciam <td> neleidzia naudoti $radar->getSpeed();
+if ($_REQUEST['filter'] == "") {
+    foreach ($eventObj as $events) {
+        echo "<tr>
+                <td>$events->dateOfEvent</td>
+                <td>$events->plateNumber</td>
+                <td>{$events->getSpeed()}</td>
+            </tr>";
+    }
+} else {
+    $filter = "/(" . $_REQUEST['filter'] . ")/i";
+    echo "<h2>Vaizduojami rezultatai, kuriu valstybiniai numeriai turi: " . $_REQUEST['filter'] . "</h2><br>";
+    foreach ($eventObj as $events) {
+        if (preg_match($filter, $events->plateNumber)) {
+            echo "<tr>
+                    <td>$events->dateOfEvent</td>
+                    <td>$events->plateNumber</td>
+                    <td>{$events->getSpeed()}</td>
+                </tr>";
+        }
+    }
+} // Norint iskviesti funkcija reik {}
 ?>
 </table>
 </body>
