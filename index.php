@@ -18,7 +18,7 @@ if (isset($_GET['delete'])) {
     $conn->query($sql);
 }
 
-$row = []; // Kodel reikia tuscia masyva sukurti? 
+$row = []; // Kodel reik tuscio masyvo cia?
 if (isset($_GET['edit'])) {
     $sql = "SELECT * FROM radars WHERE id = " . intval($_GET['edit']);
     $result = $conn->query($sql);
@@ -55,7 +55,13 @@ laikas: <input type = 'number' name = 'time' placeholder="Laikas sekundemis" req
 </form>
 
 <?php
-$sql = "SELECT id, date, number, distance, time, distance/time*3.6 AS speed FROM radars ORDER BY date, speed DESC"; //TODO suprasti kaip veikia - LIMIT ? OFFSET ?
+if (isset($_GET['offset'])) {
+    $offset = $_GET['offset'];
+} else {
+    $offset = 0;
+}
+
+$sql = "SELECT id, date, number, distance, time, distance/time*3.6 AS speed FROM radars ORDER BY date, speed DESC LIMIT 10 OFFSET  $offset";
 $result = $conn->query($sql);
 ?>
 <table>
@@ -89,6 +95,8 @@ if ($result->num_rows > 0) {
     </tr>
 <?php endwhile; ?> 
 </table>
+<a href="?offset=<?= $offset == (0) ? 0 : $offset - 10 ?>" class="previous">&laquo; Atgal</a>
+<a href="?offset=<?= $offset + 10 ?>" class="next">Pirmyn &raquo;</a> <!-- Kaip padaryt, kad nevirsytu max? -->
 <?php 
 } else echo 'Nera duomenu';
 ?>
