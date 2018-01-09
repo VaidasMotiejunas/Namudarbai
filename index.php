@@ -50,6 +50,7 @@ Numeris: <input type = 'text' name = 'number' placeholder='XXX000' required valu
 Atstumas: <input type = 'number' name = 'distance' placeholder="Atstumas metrais" required value = "<?= isset($row['distance']) ? $row['distance'] : "" ?>"> <br>
 laikas: <input type = 'number' name = 'time' placeholder="Laikas sekundemis" required value = "<?= isset($row['time']) ? $row['time'] : "" ?>"> <br>
 <button name="save" type="submit">Issaugoti</button>
+<button name="automobiliai" type="submit">Automobiliai</button>
 </form>
 
 <?php
@@ -94,9 +95,34 @@ if ($result->num_rows > 0) {
 <?php endwhile; ?> 
 </table>
 <a href="?offset=<?= $offset == (0) ? 0 : $offset - 10 ?>" class="previous">&laquo; Atgal</a>
-<a href="?offset=<?= $offset + 10 ?>" class="next">Pirmyn &raquo;</a> <!-- Kaip padaryt, kad nevirsytu max? -->
+<a href="?offset=<?= $offset + 10 ?>" class="next">Pirmyn &raquo;</a> <!-- Prideti if. jei nere rezultatu nevaizduoti mygtuko  -->
 <?php 
 } else echo 'Nera duomenu';
 ?>
+<?php
+if (isset($_POST['automobiliai'])):
+?>
+<table>
+    <tr>
+        <th>Valstybinis numeris</th>
+        <th>Irasu kiekis</th>
+        <th>Uzfiksuotas maksimalus greitis</th>
+    </tr>
+<?php 
+$sql2 = "SELECT number, COUNT(*) AS kiekis, MAX(distance/time*3.6) AS maxspeed FROM radars ORDER BY number, maxspeed DESC";
+$result2 = $conn->query($sql2);
+ 
+if ($result2->num_rows > 0) {
+    while ($row = $result2->fetch_assoc()):
+?>
+    <tr>
+        <td><?= $row['number'] ?></td>    
+        <td><?= $row['kiekis'] ?></td>    
+        <td><?= $row['maxspeed'] ?></td>       
+        <td>
+        </td>    
+    </tr>
+<?php endwhile;} endif; ?> 
+</table>
 </body>
 </html>
