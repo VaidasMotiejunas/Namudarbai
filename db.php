@@ -13,7 +13,7 @@ function connectDB() {
     // Check connection 
     if ($conn->connect_error) {
         die('Nepavyko prisijungti: ' .$conn->connect_error);
-    } echo "Pavyko prisijungti";
+    }
     return $conn;
 }
 
