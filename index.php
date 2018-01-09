@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<style>
-</style>
     <meta charset="UTF-8">
     <title>Namu darbas nr. 12</title>
 </head>
