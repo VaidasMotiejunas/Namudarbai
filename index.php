@@ -127,7 +127,7 @@ if ($result->num_rows > 0) {
 </table>
 <!-- Mygtukai pgr. lentelei puslapiuoti -->
 <a href="?offset=<?= $offset == (0) ? 0 : $offset - 15 ?>" class="previous">&laquo; Atgal</a>
-<a href="?offset=<?= $offset + 15 ?>" class="next">Pirmyn &raquo;</a> <!-- Prideti if. jei nere rezultatu nevaizduoti mygtuko  -->
+<a href="?offset=<?= $offset + 15 ?>" class="next">Pirmyn &raquo;</a> <!-- Prideti if. jei nere rezultatu nevaizduoti mygtuko. reik sagot sesijoj kokie  metai paduoti  -->
 <?php 
 } else echo 'Nera duomenu';
 ?>
