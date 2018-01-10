@@ -132,7 +132,7 @@ if ($result->num_rows > 0) {
 } else echo 'Nera duomenu';
 ?>
 <?php if (((isset($_POST['metaiForSorting'])) && ($_POST['dateForSorting'] != "")) ||
-                ((isset($_POST['menuoForSorting'])) && ($_POST['dateForSorting'] != ""))) : ?>
+                ((isset($_POST['menuoForSorting'])) && ($_POST['dateForSorting'] != ""))) :?>
 <table>
     <tr>
         <th>Irasu kiekis</th> 
@@ -142,10 +142,10 @@ if ($result->num_rows > 0) {
     </tr>
 <?php 
 $result = $conn->query($sql);
-if ($result->num_rows > 0) {
+if ($result->num_rows > 0):
     $kiekis = 0;
     $maxspeed = 0;
-    $minspeed = 0;
+    $minspeed = 1000; //greitas sprendimas, kad min speed nebutu 0
     $vidspeed = 0;
     while ($row = $result->fetch_assoc()){
         $kiekis += $row['kiekis'];
@@ -157,14 +157,14 @@ if ($result->num_rows > 0) {
         }
         $vidspeed += $row['speed'];
     }
-        $vidspeed = $vidspeed / count($row['speed']); ?>
+        $vidspeed = $vidspeed / $kiekis; ?>
             <tr>
                 <td><?= $kiekis ?></td>    
                 <td><?= round($minspeed, 0) ?></td>    
                 <td><?= round($maxspeed, 0) ?></td>    
                 <td><?= round($vidspeed, 0) ?></td>     
             </tr>
-         <?php} endif;?>
+<?php endif; endif;?>
 </table>
 <?php
 // Visu auto isvedimas
