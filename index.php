@@ -2,20 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Namu darbas nr. 12</title>
+    <title>Namu darbas nr. 13</title>
 </head>
 <body>
     
 <?php
-
+// Jungiames prie DB
 require_once 'db.php';
 $conn = connectDB();
 
+// Irasu trinimas
 if (isset($_GET['delete'])) {
     $sql = "DELETE FROM radars WHERE id = " . intval($_GET['delete']);
     $conn->query($sql);
 }
 
+// Jei paspaudziama taisyti, reiksmes yra suvedamos i forma koregavimui
 $row = []; // Kodel reik tuscio masyvo cia?
 if (isset($_GET['edit'])) {
     $sql = "SELECT * FROM radars WHERE id = " . intval($_GET['edit']);
@@ -25,6 +27,7 @@ if (isset($_GET['edit'])) {
     }
 }
 
+// Nauju irasu ivedimas, jei nurodytas id tada redagavimas esamo iraso
 if (isset($_POST['save'])) {
     $date = $_POST['date'];
     $number = $_POST['number'];
@@ -42,7 +45,20 @@ if (isset($_POST['save'])) {
     }
 }
 
+//Sukuriam filtra
+$rez = [];
+if (isset($_POST['metaiForSorting'])){
+    $filter = "/^\d\d\d\d/s";
+    preg_match_all($filter, $_POST['dateForSorting'], $rez);
+}
+
+if (isset($_POST['menuoForSorting'])){
+    $filter = "/\d\d$/s";
+    preg_match_all($filter, $_POST['dateForSorting'], $rez);
+}
+
 ?>
+<!-- Forma duomenu ivedimui ir redagavimui -->
 <form method = 'post'>
 <input type = 'hidden' name = 'id' required value = "<?= isset($row['id']) ? $row['id'] : 0 ?>">
 Data: <input type = 'text' name = 'date' placeholder ="MMMM-mm-dd hh:mm:ss" required value = "<?= isset($row['date']) ? $row['date'] : "" ?>"> <br>
@@ -50,17 +66,25 @@ Numeris: <input type = 'text' name = 'number' placeholder='XXX000' required valu
 Atstumas: <input type = 'number' name = 'distance' placeholder="Atstumas metrais" required value = "<?= isset($row['distance']) ? $row['distance'] : "" ?>"> <br>
 laikas: <input type = 'number' name = 'time' placeholder="Laikas sekundemis" required value = "<?= isset($row['time']) ? $row['time'] : "" ?>"> <br>
 <button name="save" type="submit">Issaugoti</button>
+</form>
+<!-- Forma duomenu rusiavimui pagal data ir visu auto isvedimui -->
+<form method = 'post'>
+Duomenu rusiavimas <br>
+Data: <input type = 'text' name = 'dateForSorting' placeholder = "MMMM-mm" > <br>
+<button name = "metaiForSorting" type = "submit">Metai</button>
+<button name = "menuoForSorting" type = "submit">Menuo</button>
 <button name="automobiliai" type="submit">Automobiliai</button>
 </form>
 
 <?php
+// Puslapiavimas
 if (isset($_GET['offset'])) {
     $offset = $_GET['offset'];
 } else {
     $offset = 0;
 }
-
-$sql = "SELECT id, date, number, distance, time, distance/time*3.6 AS speed FROM radars ORDER BY date, speed DESC LIMIT 10 OFFSET  $offset";
+// Duomenu isvedimas
+$sql = "SELECT YEAR(date) AS metai, MONTH(date) AS menuo, id, date, number, distance, time, distance/time*3.6 AS speed FROM radars ORDER BY date, speed DESC LIMIT 15 OFFSET  $offset";
 $result = $conn->query($sql);
 ?>
 <table>
@@ -78,9 +102,12 @@ $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     $eilNr = 1;
     while ($row = $result->fetch_assoc()):
+        //Jei nuspaustas rusiavimo mygtukas "Metai" ir ivesta data, tuomet rusiuoja pagal metus
+        if ((isset($_POST['metaiForSorting'])) && ($_POST['dateForSorting'] != "")){
+            if ($rez[0][0] == $row['metai']):
 ?>
     <tr>
-        <td><?= $eilNr++ ?></td> <?php //Kodel <?= , o ne <?php ?>
+        <td><?= $eilNr++ ?></td>
         <td><?= $row['id'] ?></td>    
         <td><?= $row['date'] ?></td>    
         <td><?= $row['number'] ?></td>    
@@ -88,18 +115,55 @@ if ($result->num_rows > 0) {
         <td><?= $row['time'] ?></td>    
         <td><?= round($row['speed'], 0); ?></td>    
         <td>
-        <a href="?edit=<?= $row['id'] ?>"> Taisyti</a> <!-- Kodel uztenka rasyti ?edit=, kaip sugeneruoja visa linka? -->
+        <a href="?edit=<?= $row['id'] ?>"> Taisyti</a>
         <a href="?delete=<?= $row['id'] ?>"> Trinti</a>
         </td>    
     </tr>
-<?php endwhile; ?> 
+            <?php endif;
+            //Jei nuspaustas rusiavimo mygtukas "Menuo" ir ivesta data, tuomet rusiuoja pagal menesi
+         }elseif ((isset($_POST['menuoForSorting'])) && ($_POST['dateForSorting'] != "")) {
+            if ($rez[0][0] == $row['menuo']):
+                ?>
+                    <tr>
+                        <td><?= $eilNr++ ?></td>
+                        <td><?= $row['id'] ?></td>    
+                        <td><?= $row['date'] ?></td>    
+                        <td><?= $row['number'] ?></td>    
+                        <td><?= $row['distance'] ?></td>    
+                        <td><?= $row['time'] ?></td>    
+                        <td><?= round($row['speed'], 0); ?></td>    
+                        <td>
+                        <a href="?edit=<?= $row['id'] ?>"> Taisyti</a>
+                        <a href="?delete=<?= $row['id'] ?>"> Trinti</a>
+                        </td>    
+                    </tr>
+            <?php endif;
+            //Jei Nenuspausti rusiavimo mygtukai tuomet isves visas reiksmes
+         } elseif ((!isset($_Post['metaiForSorting'])) && (!isset($_Post['menuoForSorting']))) {
+            ?>
+            <tr>
+                <td><?= $eilNr++ ?></td>
+                <td><?= $row['id'] ?></td>    
+                <td><?= $row['date'] ?></td>    
+                <td><?= $row['number'] ?></td>    
+                <td><?= $row['distance'] ?></td>    
+                <td><?= $row['time'] ?></td>    
+                <td><?= round($row['speed'], 0); ?></td>    
+                <td>
+                <a href="?edit=<?= $row['id'] ?>"> Taisyti</a>
+                <a href="?delete=<?= $row['id'] ?>"> Trinti</a>
+                </td>    
+            </tr>
+         <?php } endwhile;?>
 </table>
-<a href="?offset=<?= $offset == (0) ? 0 : $offset - 10 ?>" class="previous">&laquo; Atgal</a>
-<a href="?offset=<?= $offset + 10 ?>" class="next">Pirmyn &raquo;</a> <!-- Prideti if. jei nere rezultatu nevaizduoti mygtuko  -->
+<!-- Mygtukai pgr. lentelei puslapiuoti -->
+<a href="?offset=<?= $offset == (0) ? 0 : $offset - 15 ?>" class="previous">&laquo; Atgal</a>
+<a href="?offset=<?= $offset + 15 ?>" class="next">Pirmyn &raquo;</a> <!-- Prideti if. jei nere rezultatu nevaizduoti mygtuko  -->
 <?php 
 } else echo 'Nera duomenu';
 ?>
 <?php
+// Visu auto isvedimas
 if (isset($_POST['automobiliai'])):
 ?>
 <table>
@@ -109,7 +173,7 @@ if (isset($_POST['automobiliai'])):
         <th>Uzfiksuotas maksimalus greitis</th>
     </tr>
 <?php 
-$sql2 = "SELECT number, COUNT(*) AS kiekis, MAX(distance/time*3.6) AS maxspeed FROM radars ORDER BY number, maxspeed DESC";
+$sql2 = "SELECT DISTINCT number, COUNT(number) AS kiekis, MAX(distance/time*3.6) AS maxspeed FROM radars GROUP BY number";
 $result2 = $conn->query($sql2);
  
 if ($result2->num_rows > 0) {
@@ -118,11 +182,14 @@ if ($result2->num_rows > 0) {
     <tr>
         <td><?= $row['number'] ?></td>    
         <td><?= $row['kiekis'] ?></td>    
-        <td><?= $row['maxspeed'] ?></td>       
+        <td><?= round($row['maxspeed'], 0) ?></td>       
         <td>
         </td>    
     </tr>
-<?php endwhile;} endif; ?> 
+<?php
+endwhile;
+} 
+endif; ?> 
 </table>
 </body>
 </html>
