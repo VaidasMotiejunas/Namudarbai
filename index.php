@@ -84,7 +84,14 @@ if (isset($_GET['offset'])) {
     $offset = 0;
 }
 // Duomenu isvedimas
-$sql = "SELECT YEAR(date) AS metai, MONTH(date) AS menuo, id, date, number, distance, time, distance/time*3.6 AS speed FROM radars ORDER BY date, speed DESC LIMIT 15 OFFSET  $offset";
+if ((isset($_POST['metaiForSorting'])) && ($_POST['dateForSorting'] != "")){
+    $metai = $rez[0][0];
+    $sql = "SELECT COUNT(*) AS kiekis, YEAR(date) AS metai, id, date, number, distance, time, distance/time*3.6 AS speed, MIN(distance/time*3.6) AS minspeed, MAX(distance/time*3.6) AS maxspeed, AVG(distance/time*3.6) AS vidspeed FROM radars GROUP BY id HAVING metai = $metai LIMIT 15 OFFSET $offset";
+} elseif ((isset($_POST['menuoForSorting'])) && ($_POST['dateForSorting'] != "")) {
+    $menuo = $rez[0][0];
+    $sql = "SELECT COUNT(*) AS kiekis, MONTH(date) AS menuo, id, date, number, distance, time, distance/time*3.6 AS speed, MIN(distance/time*3.6) AS minspeed, MAX(distance/time*3.6) AS maxspeed, AVG(distance/time*3.6) AS vidspeed FROM radars GROUP BY id HAVING menuo = $menuo LIMIT 15 OFFSET $offset";
+} else
+    $sql = "SELECT YEAR(date) AS metai, MONTH(date) AS menuo, id, date, number, distance, time, distance/time*3.6 AS speed FROM radars ORDER BY date, speed DESC LIMIT 15 OFFSET  $offset";
 $result = $conn->query($sql);
 ?>
 <table>
@@ -102,44 +109,6 @@ $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     $eilNr = 1;
     while ($row = $result->fetch_assoc()):
-        //Jei nuspaustas rusiavimo mygtukas "Metai" ir ivesta data, tuomet rusiuoja pagal metus
-        if ((isset($_POST['metaiForSorting'])) && ($_POST['dateForSorting'] != "")){
-            if ($rez[0][0] == $row['metai']):
-?>
-    <tr>
-        <td><?= $eilNr++ ?></td>
-        <td><?= $row['id'] ?></td>    
-        <td><?= $row['date'] ?></td>    
-        <td><?= $row['number'] ?></td>    
-        <td><?= $row['distance'] ?></td>    
-        <td><?= $row['time'] ?></td>    
-        <td><?= round($row['speed'], 0); ?></td>    
-        <td>
-        <a href="?edit=<?= $row['id'] ?>"> Taisyti</a>
-        <a href="?delete=<?= $row['id'] ?>"> Trinti</a>
-        </td>    
-    </tr>
-            <?php endif;
-            //Jei nuspaustas rusiavimo mygtukas "Menuo" ir ivesta data, tuomet rusiuoja pagal menesi
-         }elseif ((isset($_POST['menuoForSorting'])) && ($_POST['dateForSorting'] != "")) {
-            if ($rez[0][0] == $row['menuo']):
-                ?>
-                    <tr>
-                        <td><?= $eilNr++ ?></td>
-                        <td><?= $row['id'] ?></td>    
-                        <td><?= $row['date'] ?></td>    
-                        <td><?= $row['number'] ?></td>    
-                        <td><?= $row['distance'] ?></td>    
-                        <td><?= $row['time'] ?></td>    
-                        <td><?= round($row['speed'], 0); ?></td>    
-                        <td>
-                        <a href="?edit=<?= $row['id'] ?>"> Taisyti</a>
-                        <a href="?delete=<?= $row['id'] ?>"> Trinti</a>
-                        </td>    
-                    </tr>
-            <?php endif;
-            //Jei Nenuspausti rusiavimo mygtukai tuomet isves visas reiksmes
-         } elseif ((!isset($_Post['metaiForSorting'])) && (!isset($_Post['menuoForSorting']))) {
             ?>
             <tr>
                 <td><?= $eilNr++ ?></td>
@@ -154,7 +123,7 @@ if ($result->num_rows > 0) {
                 <a href="?delete=<?= $row['id'] ?>"> Trinti</a>
                 </td>    
             </tr>
-         <?php } endwhile;?>
+         <?php endwhile;?>
 </table>
 <!-- Mygtukai pgr. lentelei puslapiuoti -->
 <a href="?offset=<?= $offset == (0) ? 0 : $offset - 15 ?>" class="previous">&laquo; Atgal</a>
@@ -162,6 +131,41 @@ if ($result->num_rows > 0) {
 <?php 
 } else echo 'Nera duomenu';
 ?>
+<?php if (((isset($_POST['metaiForSorting'])) && ($_POST['dateForSorting'] != "")) ||
+                ((isset($_POST['menuoForSorting'])) && ($_POST['dateForSorting'] != ""))) : ?>
+<table>
+    <tr>
+        <th>Irasu kiekis</th> 
+        <th>Maziausias gretis</th> 
+        <th>Didziausias greitis</th> 
+        <th>Vidutinis greitis</th>
+    </tr>
+<?php 
+$result = $conn->query($sql);
+if ($result->num_rows > 0) {
+    $kiekis = 0;
+    $maxspeed = 0;
+    $minspeed = 0;
+    $vidspeed = 0;
+    while ($row = $result->fetch_assoc()){
+        $kiekis += $row['kiekis'];
+        if ($maxspeed < $row['speed']){
+            $maxspeed = $row['speed'];
+        }
+        if ($minspeed > $row['speed']){
+            $minspeed = $row['speed'];
+        }
+        $vidspeed += $row['speed'];
+    }
+        $vidspeed = $vidspeed / count($row['speed']); ?>
+            <tr>
+                <td><?= $kiekis ?></td>    
+                <td><?= round($minspeed, 0) ?></td>    
+                <td><?= round($maxspeed, 0) ?></td>    
+                <td><?= round($vidspeed, 0) ?></td>     
+            </tr>
+         <?php} endif;?>
+</table>
 <?php
 // Visu auto isvedimas
 if (isset($_POST['automobiliai'])):
@@ -182,9 +186,7 @@ if ($result2->num_rows > 0) {
     <tr>
         <td><?= $row['number'] ?></td>    
         <td><?= $row['kiekis'] ?></td>    
-        <td><?= round($row['maxspeed'], 0) ?></td>       
-        <td>
-        </td>    
+        <td><?= round($row['maxspeed'], 0) ?></td>         
     </tr>
 <?php
 endwhile;
