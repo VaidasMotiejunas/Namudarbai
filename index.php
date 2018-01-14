@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Namu darbas nr. 13</title>
+    <title>Namu darbas nr. 14</title>
 </head>
 <body>
     
@@ -17,8 +17,8 @@ if (isset($_GET['delete'])) {
     $conn->query($sql);
 }
 
-// Jei paspaudziama taisyti, reiksmes yra suvedamos i forma koregavimui
-$row = []; // Kodel reik tuscio masyvo cia?
+// Jei paspaudziama taisyti, issiunciama uzklausa i DB, kad gautume pasirinkto iraso duomenis
+$row = [];
 if (isset($_GET['edit'])) {
     $sql = "SELECT * FROM radars WHERE id = " . intval($_GET['edit']);
     $result = $conn->query($sql);
@@ -57,6 +57,33 @@ if (isset($_POST['menuoForSorting'])){
     preg_match_all($filter, $_POST['dateForSorting'], $rez);
 }
 
+//Susiejame radars ir drivers lenteles DB pagal driverId
+if (isset($_POST['susieti'])) {
+    $plateNumber = $_POST['plateNumber'];
+    $driverName = $_POST['driver'];
+    //Surandam vairuotojui priskirta id
+    $sql = "SELECT driverId FROM drivers WHERE name = '$driverName'";
+    $result = $conn->query($sql);
+    $driverId = $result->fetch_assoc();
+    $driverIdResult = (int)$driverId['driverId'];
+    //Vairuotojo id priskiriame irasui radaru lenteleje
+    $sql = ("UPDATE radars SET driverId = $driverIdResult WHERE number = '$plateNumber' ");
+    $conn->query($sql);
+}
+
+//Ivedami nauji irasai i drivers lentele
+if (isset($_POST['saveDriver'])) {
+    if ($_POST['driverName'] == "" || $_POST['cityName'] == "" ) {
+        echo "Norint ivesti nauja vairuotoja butina uzpildyti abu laukelius";
+    } else {
+    $driverName = $_POST['driverName'];
+    $cityName = $_POST['cityName'];
+    $sql = $conn->prepare("INSERT INTO drivers (name, city) VALUES (?, ?)");
+    $sql->bind_param('ss', $driverName, $cityName);
+    $sql->execute();
+    }
+}
+
 ?>
 <!-- Forma duomenu ivedimui ir redagavimui -->
 <form method = 'post'>
@@ -67,6 +94,7 @@ Atstumas: <input type = 'number' name = 'distance' placeholder="Atstumas metrais
 laikas: <input type = 'number' name = 'time' placeholder="Laikas sekundemis" required value = "<?= isset($row['time']) ? $row['time'] : "" ?>"> <br>
 <button name="save" type="submit">Issaugoti</button>
 </form>
+
 <!-- Forma duomenu rusiavimui pagal data ir visu auto isvedimui -->
 <form method = 'post'>
 Duomenu rusiavimas <br>
@@ -74,6 +102,42 @@ Data: <input type = 'text' name = 'dateForSorting' placeholder = "MMMM-mm" > <br
 <button name = "metaiForSorting" type = "submit">Metai</button>
 <button name = "menuoForSorting" type = "submit">Menuo</button>
 <button name="automobiliai" type="submit">Automobiliai</button>
+</form>
+
+<!-- Forma duomenu ivedimui ir redagavimui -->
+<form method = 'post'>
+Vardas Pavarde: <input type = 'text' name = 'driverName' placeholder ="Vardenis Pavardenis"> <br>
+Miestas: <input type = 'text' name = 'cityName' placeholder='Miesto pavadinimas'> <br>
+<button name="saveDriver" type="submit">Issaugoti</button>
+</form>
+
+<!-- Forma duomenim susieti -->
+<?php
+// Uzklausos drop down meniu
+$sqlRadarEvents = "SELECT DISTINCT number FROM radars ORDER BY number ASC";
+$resultRadarEvents = $conn->query($sqlRadarEvents);
+$sqlDrivers = "SELECT DISTINCT name FROM drivers ORDER BY name ASC";
+$resultDrivers = $conn->query($sqlDrivers);
+?>
+<form method = 'post'>
+Duomenu susiejimas <br>
+<select name = 'plateNumber'> <br>
+    <?php
+    if ($resultRadarEvents->num_rows > 0){
+        while ($row = $resultRadarEvents->fetch_assoc()){
+    ?>
+    <option value = "<?=$row['number']?>"><?=$row['number']?></option>
+        <?php }} ?>
+</select>
+<select name = 'driver'> <br>
+<?php
+    if ($resultDrivers->num_rows > 0){
+        while ($row = $resultDrivers->fetch_assoc()){
+    ?>
+    <option value = "<?=$row['name']?>"><?=$row['name']?></option>
+        <?php }} ?>
+</select>
+<button name="susieti" type="submit">Susieti duomenis</button>
 </form>
 
 <?php
@@ -86,12 +150,15 @@ if (isset($_GET['offset'])) {
 // Duomenu isvedimas
 if ((isset($_POST['metaiForSorting'])) && ($_POST['dateForSorting'] != "")){
     $metai = $rez[0][0];
-    $sql = "SELECT COUNT(*) AS kiekis, YEAR(date) AS metai, id, date, number, distance, time, distance/time*3.6 AS speed, MIN(distance/time*3.6) AS minspeed, MAX(distance/time*3.6) AS maxspeed, AVG(distance/time*3.6) AS vidspeed FROM radars GROUP BY id HAVING metai = $metai";
+    $sql = "SELECT COUNT(*) AS kiekis, YEAR(date) AS metai, id, date, number, distance, time, distance/time*3.6 AS speed, MIN(distance/time*3.6) AS minspeed, MAX(distance/time*3.6) AS maxspeed, AVG(distance/time*3.6) AS vidspeed, name, city
+     FROM radars r LEFT JOIN drivers d ON r.driverId = d.driverId GROUP BY id HAVING metai = $metai";
 } elseif ((isset($_POST['menuoForSorting'])) && ($_POST['dateForSorting'] != "")) {
     $menuo = $rez[0][0];
-    $sql = "SELECT COUNT(*) AS kiekis, MONTH(date) AS menuo, id, date, number, distance, time, distance/time*3.6 AS speed, MIN(distance/time*3.6) AS minspeed, MAX(distance/time*3.6) AS maxspeed, AVG(distance/time*3.6) AS vidspeed FROM radars GROUP BY id HAVING menuo = $menuo";
+    $sql = "SELECT COUNT(*) AS kiekis, MONTH(date) AS menuo, id, date, number, distance, time, distance/time*3.6 AS speed, MIN(distance/time*3.6) AS minspeed, MAX(distance/time*3.6) AS maxspeed, AVG(distance/time*3.6) AS vidspeed, name, city 
+    FROM radars r LEFT JOIN drivers d ON r.driverId = d.driverId GROUP BY id HAVING menuo = $menuo";
 } else
-    $sql = "SELECT YEAR(date) AS metai, MONTH(date) AS menuo, id, date, number, distance, time, distance/time*3.6 AS speed FROM radars ORDER BY date, speed DESC LIMIT 15 OFFSET  $offset";
+    $sql = "SELECT id, date, number, distance, time, distance/time*3.6 AS speed, name, city
+    FROM radars r LEFT JOIN drivers d ON r.driverId = d.driverId ORDER BY date, speed DESC LIMIT 15 OFFSET  $offset";
 $result = $conn->query($sql);
 ?>
 <table>
@@ -104,6 +171,8 @@ $result = $conn->query($sql);
         <th>Laikas, s</th>
         <th>Greitis, km/h</th>
         <th>Veiksmai</th>
+        <th>Vardas, pavarde</th>
+        <th>miestas</th>
     </tr>
 <?php 
 if ($result->num_rows > 0) {
@@ -121,7 +190,9 @@ if ($result->num_rows > 0) {
                 <td>
                 <a href="?edit=<?= $row['id'] ?>"> Taisyti</a>
                 <a href="?delete=<?= $row['id'] ?>"> Trinti</a>
-                </td>    
+                </td>
+                <td><?= $row['name'] ?></td>
+                <td><?= $row['city'] ?></td>
             </tr>
          <?php endwhile;?>
 </table>
@@ -134,6 +205,7 @@ if ($result->num_rows > 0) {
 <a href="?offset=<?= $offset == (0) ? 0 : $offset - 15 ?>" class="previous">&laquo; Atgal</a>
 <?php } if (((isset($_POST['metaiForSorting'])) && ($_POST['dateForSorting'] != "")) ||
                 ((isset($_POST['menuoForSorting'])) && ($_POST['dateForSorting'] != ""))) :?>
+<!-- Jei ijungtas rusiavimas isvedama lentele su rezultatu statistika -->
 <table>
     <tr>
         <th>Irasu kiekis</th> 
@@ -146,7 +218,7 @@ $result = $conn->query($sql);
 if ($result->num_rows > 0):
     $kiekis = 0;
     $maxspeed = 0;
-    $minspeed = 1000; //greitas sprendimas, kad min speed nebutu 0
+    $minspeed = 1000000; //greitas sprendimas, kad min speed nebutu 0
     $vidspeed = 0;
     while ($row = $result->fetch_assoc()){
         $kiekis += $row['kiekis'];
@@ -194,5 +266,6 @@ endwhile;
 } 
 endif; ?> 
 </table>
+<?php $conn->close(); ?>
 </body>
 </html>

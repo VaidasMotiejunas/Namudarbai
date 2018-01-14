@@ -2,7 +2,7 @@
 
 function connectDB() {
     $servername = 'localhost';
-    $dbname = 'nd11';
+    $dbname = 'nd14';
     $username = 'Auto';
     $password = 'LabaiSlaptas123';
 
@@ -16,6 +16,5 @@ function connectDB() {
     }
     return $conn;
 }
-
 
 ?>
