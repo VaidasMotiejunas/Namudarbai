@@ -86,10 +86,10 @@ if (isset($_GET['offset'])) {
 // Duomenu isvedimas
 if ((isset($_POST['metaiForSorting'])) && ($_POST['dateForSorting'] != "")){
     $metai = $rez[0][0];
-    $sql = "SELECT COUNT(*) AS kiekis, YEAR(date) AS metai, id, date, number, distance, time, distance/time*3.6 AS speed, MIN(distance/time*3.6) AS minspeed, MAX(distance/time*3.6) AS maxspeed, AVG(distance/time*3.6) AS vidspeed FROM radars GROUP BY id HAVING metai = $metai LIMIT 15 OFFSET $offset";
+    $sql = "SELECT COUNT(*) AS kiekis, YEAR(date) AS metai, id, date, number, distance, time, distance/time*3.6 AS speed, MIN(distance/time*3.6) AS minspeed, MAX(distance/time*3.6) AS maxspeed, AVG(distance/time*3.6) AS vidspeed FROM radars GROUP BY id HAVING metai = $metai";
 } elseif ((isset($_POST['menuoForSorting'])) && ($_POST['dateForSorting'] != "")) {
     $menuo = $rez[0][0];
-    $sql = "SELECT COUNT(*) AS kiekis, MONTH(date) AS menuo, id, date, number, distance, time, distance/time*3.6 AS speed, MIN(distance/time*3.6) AS minspeed, MAX(distance/time*3.6) AS maxspeed, AVG(distance/time*3.6) AS vidspeed FROM radars GROUP BY id HAVING menuo = $menuo LIMIT 15 OFFSET $offset";
+    $sql = "SELECT COUNT(*) AS kiekis, MONTH(date) AS menuo, id, date, number, distance, time, distance/time*3.6 AS speed, MIN(distance/time*3.6) AS minspeed, MAX(distance/time*3.6) AS maxspeed, AVG(distance/time*3.6) AS vidspeed FROM radars GROUP BY id HAVING menuo = $menuo";
 } else
     $sql = "SELECT YEAR(date) AS metai, MONTH(date) AS menuo, id, date, number, distance, time, distance/time*3.6 AS speed FROM radars ORDER BY date, speed DESC LIMIT 15 OFFSET  $offset";
 $result = $conn->query($sql);
@@ -129,9 +129,10 @@ if ($result->num_rows > 0) {
 <a href="?offset=<?= $offset == (0) ? 0 : $offset - 15 ?>" class="previous">&laquo; Atgal</a>
 <a href="?offset=<?= $offset + 15 ?>" class="next">Pirmyn &raquo;</a> <!-- Prideti if. jei nere rezultatu nevaizduoti mygtuko. reik sagot sesijoj kokie  metai paduoti  -->
 <?php 
-} else echo 'Nera duomenu';
+} else {echo "Nera duomenu <br>";
 ?>
-<?php if (((isset($_POST['metaiForSorting'])) && ($_POST['dateForSorting'] != "")) ||
+<a href="?offset=<?= $offset == (0) ? 0 : $offset - 15 ?>" class="previous">&laquo; Atgal</a>
+<?php } if (((isset($_POST['metaiForSorting'])) && ($_POST['dateForSorting'] != "")) ||
                 ((isset($_POST['menuoForSorting'])) && ($_POST['dateForSorting'] != ""))) :?>
 <table>
     <tr>
