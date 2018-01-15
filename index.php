@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link rel="stylesheet" type="text/css" href="style.css">
     <meta charset="UTF-8">
     <title>Namu darbas nr. 14</title>
 </head>
@@ -86,7 +87,9 @@ if (isset($_POST['saveDriver'])) {
 
 ?>
 <!-- Forma duomenu ivedimui ir redagavimui -->
+<div class="ivedimasRadars">
 <form method = 'post'>
+Radaro duomenu ivedimas <br>
 <input type = 'hidden' name = 'id' required value = "<?= isset($row['id']) ? $row['id'] : 0 ?>">
 Data: <input type = 'text' name = 'date' placeholder ="MMMM-mm-dd hh:mm:ss" required value = "<?= isset($row['date']) ? $row['date'] : "" ?>"> <br>
 Numeris: <input type = 'text' name = 'number' placeholder='XXX000' required value = "<?= isset($row['number']) ? $row['number'] : "" ?>"> <br>
@@ -94,8 +97,10 @@ Atstumas: <input type = 'number' name = 'distance' placeholder="Atstumas metrais
 laikas: <input type = 'number' name = 'time' placeholder="Laikas sekundemis" required value = "<?= isset($row['time']) ? $row['time'] : "" ?>"> <br>
 <button name="save" type="submit">Issaugoti</button>
 </form>
+</div>
 
 <!-- Forma duomenu rusiavimui pagal data ir visu auto isvedimui -->
+<div class="rusiavimas">
 <form method = 'post'>
 Duomenu rusiavimas <br>
 Data: <input type = 'text' name = 'dateForSorting' placeholder = "MMMM-mm" > <br>
@@ -103,13 +108,17 @@ Data: <input type = 'text' name = 'dateForSorting' placeholder = "MMMM-mm" > <br
 <button name = "menuoForSorting" type = "submit">Menuo</button>
 <button name="automobiliai" type="submit">Automobiliai</button>
 </form>
+</div>
 
 <!-- Forma duomenu ivedimui ir redagavimui -->
+<div class="ivedimasDrivers">
 <form method = 'post'>
+Vairuotojo duomenu ivedimas <br>
 Vardas Pavarde: <input type = 'text' name = 'driverName' placeholder ="Vardenis Pavardenis"> <br>
 Miestas: <input type = 'text' name = 'cityName' placeholder='Miesto pavadinimas'> <br>
 <button name="saveDriver" type="submit">Issaugoti</button>
 </form>
+</div>
 
 <!-- Forma duomenim susieti -->
 <?php
@@ -119,6 +128,7 @@ $resultRadarEvents = $conn->query($sqlRadarEvents);
 $sqlDrivers = "SELECT DISTINCT name FROM drivers ORDER BY name ASC";
 $resultDrivers = $conn->query($sqlDrivers);
 ?>
+<div class="susiejimas">
 <form method = 'post'>
 Duomenu susiejimas <br>
 <select name = 'plateNumber'> <br>
@@ -139,6 +149,7 @@ Duomenu susiejimas <br>
 </select>
 <button name="susieti" type="submit">Susieti duomenis</button>
 </form>
+</div>
 
 <?php
 // Puslapiavimas
@@ -188,8 +199,8 @@ if ($result->num_rows > 0) {
                 <td><?= $row['time'] ?></td>    
                 <td><?= round($row['speed'], 0); ?></td>    
                 <td>
-                <a href="?edit=<?= $row['id'] ?>"> Taisyti</a>
-                <a href="?delete=<?= $row['id'] ?>"> Trinti</a>
+                <a class="mygtukas2" href="?edit=<?= $row['id'] ?>"> Taisyti</a>
+                <a class="mygtukas2" href="?delete=<?= $row['id'] ?>"> Trinti</a>
                 </td>
                 <td><?= $row['name'] ?></td>
                 <td><?= $row['city'] ?></td>
@@ -197,16 +208,16 @@ if ($result->num_rows > 0) {
          <?php endwhile;?>
 </table>
 <!-- Mygtukai pgr. lentelei puslapiuoti -->
-<a href="?offset=<?= $offset == (0) ? 0 : $offset - 15 ?>" class="previous">&laquo; Atgal</a>
-<a href="?offset=<?= $offset + 15 ?>" class="next">Pirmyn &raquo;</a> <!-- Prideti if. jei nere rezultatu nevaizduoti mygtuko. reik sagot sesijoj kokie  metai paduoti  -->
+<a class="mygtukas" href="?offset=<?= $offset == (0) ? 0 : $offset - 15 ?>" class="previous">&laquo; Atgal</a>
+<a class="mygtukas" href="?offset=<?= $offset + 15 ?>" class="next">Pirmyn &raquo;</a> <!-- Prideti if. jei nere rezultatu nevaizduoti mygtuko. reik sagot sesijoj kokie  metai paduoti  -->
 <?php 
 } else {echo "Nera duomenu <br>";
 ?>
-<a href="?offset=<?= $offset == (0) ? 0 : $offset - 15 ?>" class="previous">&laquo; Atgal</a>
+<a class="mygtukas" href="?offset=<?= $offset == (0) ? 0 : $offset - 15 ?>" class="previous">&laquo; Atgal</a>
 <?php } if (((isset($_POST['metaiForSorting'])) && ($_POST['dateForSorting'] != "")) ||
                 ((isset($_POST['menuoForSorting'])) && ($_POST['dateForSorting'] != ""))) :?>
 <!-- Jei ijungtas rusiavimas isvedama lentele su rezultatu statistika -->
-<table>
+<table id="autoStatistika">
     <tr>
         <th>Irasu kiekis</th> 
         <th>Maziausias gretis</th> 
