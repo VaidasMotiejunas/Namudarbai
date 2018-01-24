@@ -55,6 +55,11 @@ class DriversController extends Controller
     public function show($id)
     {
         $driver = Driver::find($id);
+
+        if (is_null($driver)){
+            return redirect()->route('drivers.index');
+        }
+
         return view('drivers.show', compact('driver'));
     }
 

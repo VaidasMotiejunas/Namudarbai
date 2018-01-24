@@ -58,6 +58,11 @@ class RadarsController extends Controller
     public function show($id)
     {
         $radar = Radar::find($id);
+
+        if (is_null($radar)){
+            return redirect()->route('radars.index');
+        }
+
         return view('radars.show', compact('radar')); // ['radars' => Radar::findOrFail($id)]
     }
 
