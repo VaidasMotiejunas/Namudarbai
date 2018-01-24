@@ -91,7 +91,7 @@ class DriversController extends Controller
             'city' => $request->city,
         ];
 
-        $radar->update($data);
+        $driver->update($data);
         return redirect()->route('drivers.index');
     }
 
