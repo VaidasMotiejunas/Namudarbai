@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Driver;
+use App\Http\Requests\DriversRequest;
 
 class DriversController extends Controller
 {
@@ -34,7 +35,7 @@ class DriversController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(DriversRequest $request)
     {
         $data = [
             'name' =>$request->name,
@@ -61,6 +62,7 @@ class DriversController extends Controller
         }
 
         return view('drivers.show', compact('driver'));
+
     }
 
     /**
@@ -82,7 +84,7 @@ class DriversController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(DriversRequest $request, $id)
     {
         $driver = Driver::find($id);
 

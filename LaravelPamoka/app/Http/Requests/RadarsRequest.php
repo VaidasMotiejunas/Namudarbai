@@ -13,7 +13,7 @@ class RadarsRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true; //visi vartotojai gali vykdyti sia uzklausa
     }
 
     /**
@@ -24,7 +24,10 @@ class RadarsRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'distance' => 'required',
+            'time' => 'required',
+            'number' => 'min:6 | max:6 | required',
+            'date' => 'required',
         ];
     }
 }

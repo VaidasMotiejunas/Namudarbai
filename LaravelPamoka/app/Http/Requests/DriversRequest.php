@@ -13,7 +13,7 @@ class DriversRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,8 @@ class DriversRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => 'required | max:191',
+            'city' => 'required | max:191',
         ];
     }
 }

@@ -1,15 +1,34 @@
-@extends ('layouts.layout')
-
+@extends('layouts.layout')
 @section('content')
 
-<div style="container">
+<style>
+    input {
+        width: 250px;
+        height: 30px;
+        font-size: 15px;
+        margin: 8px;
+        text-align: center;
+    }
+</style>
+
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
+<div style="width: 500px;">
     <form action="{{ route('drivers.store') }}" method="POST">
         {{ csrf_field() }}
         {{ method_field('PUT') }}
 
-        <input type="string" name="name" placeholder="Iveskite vairuotojo varda">
-        <input type="string" name="city" placeholder="Iveskite miesta">
-        <input type="submit" value="Pridėti">
+        <input class="form-control" type="string" name="name" placeholder="Iveskite vairuotojo varda">
+        <input class="form-control" type="string" name="city" placeholder="Iveskite miesta">
+        <input class="btn btn-outline-info btn-block" type="submit" value="Pridėti">
     </form>
 </div>
 

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Radar;
+// use \Validator; // Naudojamas jei validatorius nusirodome Controleri
+use App\Http\Requests\RadarsRequest;
 
 class RadarsController extends Controller
 {
@@ -35,8 +37,18 @@ class RadarsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(RadarsRequest $request)
     {
+
+        // Sis validator naudojmas jei nesame susikure savo Request apdorojimo - store(Request $request)
+        // $validator = Validator::make($request->all(), [
+        //     'number' => 'max:6',
+        //     'time' => 'required',
+        //     'distance' => 'required',
+        // ]);
+
+        // $validator->validate();
+
         $data = [
             'date' => $request->date,
             'number' => $request->number,
@@ -86,7 +98,7 @@ class RadarsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(RadarsRequest $request, $id)
     {
         $radar = Radar::find($id);
 
