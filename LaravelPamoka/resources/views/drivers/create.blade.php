@@ -26,8 +26,8 @@
         {{ csrf_field() }}
         {{ method_field('PUT') }}
 
-        <input class="form-control" type="string" name="name" placeholder="Iveskite vairuotojo varda">
-        <input class="form-control" type="string" name="city" placeholder="Iveskite miesta">
+        <input class="form-control" value="{{ old('name') }}" type="string" name="name" placeholder="Iveskite vairuotojo varda">
+        <input class="form-control" value="{{ old('city') }}" type="string" name="city" placeholder="Iveskite miesta">
         <input class="btn btn-outline-info btn-block" type="submit" value="Pridėti">
     </form>
 </div>
