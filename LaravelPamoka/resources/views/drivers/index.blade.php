@@ -3,15 +3,15 @@
 
 @section('content')
 
-<table class="table table-hover table-dark">
-<thead>
+<table class="table table-hover">
+<thead class="thead-dark" >
     <tr>
         <th>Name</td>
         <th>City</td>
         <th colspan="2" style="text-align:center">Veiksmai</td>
     </tr>
 </thead>
-<tbody>
+<tbody class="tbody-light">
 
     @foreach($drivers as $driver)
     <tr>
