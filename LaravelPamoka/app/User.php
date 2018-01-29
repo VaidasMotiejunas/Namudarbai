@@ -4,6 +4,8 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Radar;
+use App\Driver;
 
 class User extends Authenticatable
 {
@@ -26,4 +28,24 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function radars()
+    {
+        return $this->hasMany(Radar::class, 'user_id', 'id');
+    }
+
+    public function radarsUpdated()
+    {
+        return $this->hasMany(Radar::class, 'user_id_upd', 'id');
+    }
+
+    public function drivers()
+    {
+        return $this->hasMany(Driver::class, 'user_id', 'id');
+    }
+
+    public function driversUpdated()
+    {
+        return $this->hasMany(Driver::class, 'user_id_upd', 'id');
+    }
 }

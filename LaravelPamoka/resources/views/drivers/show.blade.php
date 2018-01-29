@@ -8,6 +8,8 @@
         <td>Vardas</td>
         <td>Miestas</td>
         <th colspan="2" style="text-align:center" >Veiksmai</td>
+        <th>Created by</td>
+        <th>Updated by</td>
     </tr>
     <tr>
         <td>{{ $driver->name }}</td>
@@ -29,6 +31,18 @@
                 <input class="btn btn-outline-danger" type ="submit" value="Istrinti"></input>
             </form>
         </td>
+        @endif
+
+        @if($driver->created_at && $driver->user_id)
+        <td>{{ $driver->user['name'] }}
+        @else
+        <td>-</td>
+        @endif
+        
+        @if($driver->updated_at && $driver->user_id_upd)
+        <td>{{ $driver->userWhoUpdated['name'] }}
+        @else
+        <td>-</td>
         @endif
     </tr>        
 </table>

@@ -1,4 +1,3 @@
-
 @extends('layouts.layout')
 
 @section('content')
@@ -11,18 +10,22 @@
         <th>Vardas</td>
         <th>Miestas</td>
         <th colspan="2" style="text-align:center" >Veiksmai</td>
+        <th>Created by</td>
+        <th>Updated by</td>
     </tr>
     <tr>
         <td>{{ $radar->date }}</td>
         <td>{{ $radar->number }}</td>
-        <td>{{ $radar->distance / $radar->time }}</td>
+        <td>{{ round($radar->distance / $radar->time, 2) }}</td>
+        
         @if($radar->driver)
         <td>{{ $radar->driver->name }}</td>
         <td>{{ $radar->driver->city }}</td>
         @else
-        <td>Nepriskirtas</td>
-        <td>Nepriskirtas</td>
+        <td>-</td>
+        <td>-</td>
         @endif
+
         @if($radar->trashed())
         <td>
             <form action="{{ route('radars.restore', ['radar' => $radar->id] )}}" method="POST">
@@ -39,6 +42,18 @@
                 <input class="btn btn-outline-danger" type ="submit" value="Istrinti"></input>
             </form>
         </td>
+        @endif
+
+        @if($radar->created_at && $radar->user_id)
+        <td>{{ $radar->user['name'] }}
+        @else
+        <td>-</td>
+        @endif
+        
+        @if($radar->updated_at && $radar->user_id_upd)
+        <td>{{ $radar->userWhoUpdated['name'] }}
+        @else
+        <td>-</td>
         @endif
     </tr>        
 </table>

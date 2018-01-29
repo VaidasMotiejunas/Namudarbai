@@ -11,7 +11,6 @@
     }
 </style>
 
-
 @if ($errors->any())
     <div class="alert alert-danger">
         <ul>
@@ -31,6 +30,7 @@
         <input class="form-control" type="string" name="number" value="{{ $radar->number }}">
         <input class="form-control" type="string" name="time" value="{{ $radar->time }}">
         <input class="form-control" type="string" name="distance" value="{{ $radar->distance }}">
+        <input class="form-control" value="{{ auth()->user()->id }}" type="hidden" name="user_id_upd">
         <input class="btn btn-outline-info btn-block" type="submit" value="Atnaujinti">
     </form>
 </div>

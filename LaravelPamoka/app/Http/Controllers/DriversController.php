@@ -39,7 +39,8 @@ class DriversController extends Controller
     {
         $data = [
             'name' =>$request->name,
-            'city' =>$request->city
+            'city' =>$request->city,
+            'user_id' =>$request->user_id,
         ];
 
     Driver::create($data);
@@ -84,13 +85,15 @@ class DriversController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
     public function update(DriversRequest $request, $id)
     {
         $driver = Driver::find($id);
-
+        
         $data = [
             'name' => $request->name,
             'city' => $request->city,
+            'user_id_upd' => $request->user_id_upd,
         ];
 
         $driver->update($data);

@@ -48,12 +48,13 @@ class RadarsController extends Controller
         // ]);
 
         // $validator->validate();
-
+        
         $data = [
             'date' => $request->date,
             'number' => $request->number,
             'distance' => $request->distance,
             'time' => $request->time,
+            'user_id' => $request->user_id,
         ];
 
         Radar::create($data);
@@ -87,7 +88,6 @@ class RadarsController extends Controller
     public function edit($id)
     {
         $radar = Radar::find($id);
-
         return view('radars.edit', compact('radar'));
     }
 
@@ -107,6 +107,7 @@ class RadarsController extends Controller
             'number' => $request->number,
             'distance' => $request->distance,
             'time' => $request->time,
+            'user_id_upd' => $request->user_id_upd,
         ];
         
         $radar->update($data);

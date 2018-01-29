@@ -43,7 +43,9 @@ class RadarsSeeder extends Seeder
         ];
 
         foreach ($data as $value) {
+            for ($i=0; $i < 10; $i++) { 
             DB::table('radars')->insert($value);
+            }
         }
     }
 }

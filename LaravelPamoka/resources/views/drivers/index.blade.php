@@ -9,6 +9,8 @@
         <th>Name</td>
         <th>City</td>
         <th colspan="2" style="text-align:center">Veiksmai</td>
+        <th>Created by</td>
+        <th>Updated by</td>
     </tr>
 </thead>
 <tbody class="tbody-light">
@@ -36,6 +38,19 @@
             </form>
         </td>
         @endif
+
+        @if($driver->created_at && $driver->user_id)
+        <td>{{ $driver->user['name'] }}
+        @else
+        <td>-</td>
+        @endif
+        
+        @if($driver->updated_at && $driver->user_id_upd)
+        <td>{{ $driver->userWhoUpdated['name'] }}
+        @else
+        <td>-</td>
+        @endif
+
     </tr>        
     @endforeach
 </tbody>

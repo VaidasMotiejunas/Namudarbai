@@ -12,10 +12,11 @@ class DriversTableSeeder extends Seeder
      */
     public function run()
     {
+
         $data = [
             [
                 'name' => 'Jonas Jonaitis',
-                'city' => 'Kaunas',
+                'city' => 'Klaipeda',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
@@ -34,7 +35,9 @@ class DriversTableSeeder extends Seeder
         ];
 
         foreach ($data as $value) {
+            for ($i=0; $i < 10; $i++) { 
             DB::table('drivers')->insert($value);
+            }
     }
 }
 }

@@ -30,6 +30,7 @@
         <input class="form-control" value="{{ old('number') }}" type="string" name="number" placeholder="Iveskite valstybini numeri">
         <input class="form-control" value="{{ old('time') }}" type="string" name="time" placeholder="Iveskite laika">
         <input class="form-control" value="{{ old('distance') }}" type="string" name="distance" placeholder="Iveskite atstuma">
+        <input class="form-control" value="{{ auth()->user()->id }}" type="hidden" name="user_id">
         <input class="btn btn-outline-info btn-block" type="submit" value="Pridėti">
     </form>
 </div>

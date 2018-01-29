@@ -22,14 +22,16 @@
 @endif
 
 <div style="width: 500px;">
-    <form action="{{ route('drivers.update', ['driver' => $driver->id]) }}" method="POST">
+    <form action="{{ route('drivers.update', ['driver' => $driver->driverId]) }}" method="POST">
         {{ csrf_field() }}
         {{ method_field('PUT') }}
 
         <input class="form-control" type="string" name="name" value="{{ $driver->name }}">
         <input class="form-control" type="string" name="city" value="{{ $driver->city }}">
+        <input class="form-control" value="{{ auth()->user()->id }}" type="hidden" name="user_id_upd">
         <input class="btn btn-outline-info btn-block" type="submit" value="Atnaujinti">
     </form>
 </div>
 
 @endsection
+<!--  route('drivers.update', ['driver' => $driver->driverId]) arba ./ -->
