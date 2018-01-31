@@ -88,6 +88,7 @@ class DriversController extends Controller
 
     public function update(DriversRequest $request, $id)
     {
+        // dd($request->all()); //isveda visas request reiksmes, galima i all ivesti array ir issivest viska iskart
         $driver = Driver::find($id);
         
         $data = [

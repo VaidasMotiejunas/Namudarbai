@@ -5,11 +5,11 @@
 
 <table class="table table-hover table-dark">
     <tr>
-        <td>Vardas</td>
-        <td>Miestas</td>
-        <th colspan="2" style="text-align:center" >Veiksmai</td>
-        <th>Created by</td>
-        <th>Updated by</td>
+        <td>{{ __('Name') }}</td>
+        <td>{{ __('City') }}</td>
+        <th colspan="2" style="text-align:center" >{{ __('Actions') }}</td>
+        <th>{{ __('Created_by') }}</td>
+        <th>{{ __('Updated_by') }}</td>
     </tr>
     <tr>
         <td>{{ $driver->name }}</td>

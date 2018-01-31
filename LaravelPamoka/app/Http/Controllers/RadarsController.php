@@ -87,6 +87,7 @@ class RadarsController extends Controller
      */
     public function edit($id)
     {
+        dd($id);
         $radar = Radar::find($id);
         return view('radars.edit', compact('radar'));
     }
@@ -101,6 +102,8 @@ class RadarsController extends Controller
     public function update(RadarsRequest $request, $id)
     {
         $radar = Radar::find($id);
+
+        //TODO ivesti logika, kad patikrintu ar pridedamas user id yra tarp useriu
 
         $data = [
             'date' => $request->date,

@@ -4,14 +4,14 @@
 
 <table class="table tble-stripped table-dark">
     <tr>
-        <th>Data</td>
-        <th>Numeris</td>
-        <th>Greitis</td>
-        <th>Vardas</td>
-        <th>Miestas</td>
-        <th colspan="2" style="text-align:center" >Veiksmai</td>
-        <th>Created by</td>
-        <th>Updated by</td>
+        <th>{{ trans('radars.date') }}</td>
+        <th>{{ trans('radars.number') }}</td>
+        <th>{{ trans('radars.speed') }}</td>
+        <th>{{ trans('radars.name') }}</td>
+        <th>{{ trans('radars.city') }}</td>
+        <th colspan="2" style="text-align:center" >{{ trans('radars.actions') }}</td>
+        <th>{{ trans('radars.created_by') }}</td>
+        <th>{{ trans('radars.updated_by') }}</td>
     </tr>
     <tr>
         <td>{{ $radar->date }}</td>

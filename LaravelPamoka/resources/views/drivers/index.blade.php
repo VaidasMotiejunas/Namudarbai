@@ -6,11 +6,11 @@
 <table class="table table-hover">
 <thead class="thead-dark" >
     <tr>
-        <th>Name</td>
-        <th>City</td>
-        <th colspan="2" style="text-align:center">Veiksmai</td>
-        <th>Created by</td>
-        <th>Updated by</td>
+        <th>{{ __('Name') }}</td>
+        <th>{{ __('City') }}</td>
+        <th colspan="2" style="text-align:center">{{ __('Actions') }}</td>
+        <th>{{ __('Created_by') }}</td>
+        <th>{{ __('Updated_by') }}</td>
     </tr>
 </thead>
 <tbody class="tbody-light">
