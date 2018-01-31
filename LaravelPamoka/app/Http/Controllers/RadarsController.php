@@ -87,7 +87,6 @@ class RadarsController extends Controller
      */
     public function edit($id)
     {
-        dd($id);
         $radar = Radar::find($id);
         return view('radars.edit', compact('radar'));
     }
