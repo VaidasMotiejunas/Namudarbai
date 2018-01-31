@@ -52,7 +52,7 @@ Auth::routes();
 // Route::middleware('auth')->group(function(){
 // Route::prefix('{lang?}')->middleware(['locale', 'auth'])->group(function(){ //neveikia
 // Route::prefix('{lang?}')->middleware('auth')->group(function(){ Veikia tip kaip su middleware('locale') kodel?
-Route::prefix('{lang?}')->middleware('locale')->middleware('auth')->group(function(){ //veikia, bet prastai
+Route::prefix('{lang?}')->middleware('locale', 'auth')->group(function(){ //veikia, bet prastai
 
     // Route::resource('radars', 'RadarsController'); <---- GALIMA IR TAIP
 Route::get('radars', 'RadarsController@index')->name('radars.index');
