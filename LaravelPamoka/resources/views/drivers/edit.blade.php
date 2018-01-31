@@ -29,7 +29,7 @@
         <input class="form-control" type="string" name="name" value="{{ $driver->name }}">
         <input class="form-control" type="string" name="city" value="{{ $driver->city }}">
         <input class="form-control" value="{{ auth()->user()->id }}" type="hidden" name="user_id_upd">
-        <input class="btn btn-outline-info btn-block" type="submit" value="Atnaujinti">
+        <input class="btn btn-outline-info btn-block" type="submit" value="{{ trans('buttons.edit') }}">
     </form>
 </div>
 

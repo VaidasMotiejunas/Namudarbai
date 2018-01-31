@@ -31,7 +31,7 @@
         <input class="form-control" type="string" name="time" value="{{ $radar->time }}">
         <input class="form-control" type="string" name="distance" value="{{ $radar->distance }}">
         <input class="form-control" value="{{ auth()->user()->id }}" type="hidden" name="user_id_upd">
-        <input class="btn btn-outline-info btn-block" type="submit" value="Atnaujinti">
+        <input class="btn btn-outline-info btn-block" type="submit" value="{{ trans('buttons.edit') }}">
     </form>
 </div>
 

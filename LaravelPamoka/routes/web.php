@@ -17,15 +17,18 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/en/login', function () { //Nesamone, bet suranda login jei atsijungiu
-    return view('auth/login');
-});
+// Bandymai sukurt prefix
+// Route::get('/en/login', function () { //Nesamone, bet suranda login jei atsijungiu
+//     return view('auth/login');
+// });
 
-Route::get('/en/register', function () { //Nesamone, bet suranda login jei atsijungiu
-    return view('auth/register');
-});
+// Route::get('/en/register', function () { //Nesamone, bet suranda login jei atsijungiu
+//     return view('auth/register');
+// });
 
 Auth::routes(); 
+
+//Routes be grupiu
 
 // Route::get('/home', 'HomeController@index')->name('home');
 
@@ -49,10 +52,12 @@ Auth::routes();
 // Route::post('drivers/{driver}', 'DriversController@restore')->name('drivers.restore');
 // Route::get('drivers/{driver}', 'DriversController@show')->name('drivers.show');
 
+// Routes grupes
+
 // Route::middleware('auth')->group(function(){
 // Route::prefix('{lang?}')->middleware(['locale', 'auth'])->group(function(){ //neveikia
 // Route::prefix('{lang?}')->middleware('auth')->group(function(){ Veikia tip kaip su middleware('locale') kodel?
-Route::prefix('{lang?}')->middleware('locale')->middleware('auth')->group(function(){ //veikia, bet prastai
+Route::middleware('auth', 'locale')->group(function(){
 
     // Route::resource('radars', 'RadarsController'); <---- GALIMA IR TAIP
 Route::get('radars', 'RadarsController@index')->name('radars.index');
@@ -74,7 +79,8 @@ Route::delete('drivers/{driver}', 'DriversController@destroy')->name('drivers.de
 Route::post('drivers/{driver}', 'DriversController@restore')->name('drivers.restore');
 Route::get('drivers/{driver}', 'DriversController@show')->name('drivers.show');
 
-Route::get('/language/{language}', 'LanguageController@switch')->name('language.switch');
+Route::get('/language/switch/{language}', 'LanguageController@switch')->name('language.switch');
+// Route::get('/language/{language}', 'LanguageController@switch')->name('language.switch');
 
 Route::get('/', function () {
             return view('welcome');

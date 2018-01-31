@@ -36,16 +36,16 @@
         <td>
             <form action="{{ route('radars.restore', ['radar' => $radar->id] )}}" method="POST">
             {{ csrf_field() }}
-                <input class="btn btn-outline-warning" type="submit" value="Atstatyti"></input>
+                <input class="btn btn-outline-warning" type="submit" value="{{ trans('buttons.restore') }}"></input>
             </form>
         </td>
         @else
-        <td><a class="btn btn-outline-info" href="{{ route('radars.edit', ['radar' => $radar->id]) }}">Atnaujinti</a></td>
+        <td><a class="btn btn-outline-info" href="{{ route('radars.edit', ['radar' => $radar->id]) }}">{{ trans('buttons.edit') }}</a></td>
         <td>
             <form action="{{ route('radars.destroy', ['radar' => $radar->id] )}}" method="POST">
             {{ csrf_field() }}
             {{ method_field('DELETE') }}
-                <input class="btn btn-outline-danger" type ="submit" value="istrinti"></input>
+                <input class="btn btn-outline-danger" type ="submit" value="{{ trans('buttons.delete') }}"></input>
             </form>
         </td>
         @endif

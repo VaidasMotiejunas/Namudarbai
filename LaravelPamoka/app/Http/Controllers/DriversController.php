@@ -5,9 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Driver;
 use App\Http\Requests\DriversRequest;
+use App\Repositories\DriverRepository;
 
 class DriversController extends Controller
 {
+    protected $driverRepository;
+
+    public function __construct(DriverRepository $driverRepository)
+    {
+        $this->driverRepository = $driverRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +23,8 @@ class DriversController extends Controller
      */
     public function index()
     {
-        $drivers = Driver::withTrashed()->orderBy('name', 'decs')->paginate(8);
+        $drivers = $this->driverRepository->getAllWithTrashed(8);
+
         return view('drivers.index', compact('drivers'));
     }
 
@@ -43,7 +52,7 @@ class DriversController extends Controller
             'user_id' =>$request->user_id,
         ];
 
-    Driver::create($data);
+    $this->driverRepository->create($data);
 
     return redirect()->route('drivers.index');
     }
@@ -56,7 +65,7 @@ class DriversController extends Controller
      */
     public function show($id)
     {
-        $driver = Driver::find($id);
+        $driver = $this->driverRepository->findById($id);
 
         if (is_null($driver)){
             return redirect()->route('drivers.index');
@@ -74,7 +83,8 @@ class DriversController extends Controller
      */
     public function edit($id)
     {
-        $driver = Driver::find($id);
+        $driver = $this->driverRepository->findById($id);
+        
         return view('drivers.edit', compact('driver'));
     }
 
@@ -89,7 +99,6 @@ class DriversController extends Controller
     public function update(DriversRequest $request, $id)
     {
         // dd($request->all()); //isveda visas request reiksmes, galima i all ivesti array ir issivest viska iskart
-        $driver = Driver::find($id);
         
         $data = [
             'name' => $request->name,
@@ -97,7 +106,7 @@ class DriversController extends Controller
             'user_id_upd' => $request->user_id_upd,
         ];
 
-        $driver->update($data);
+        $this->driverRepository->update($id, $data);
         return redirect()->route('drivers.index');
     }
 
@@ -109,13 +118,13 @@ class DriversController extends Controller
      */
     public function destroy($id)
     {
-        Driver::find($id)->delete();
+        $this->driverRepository->deleteById($id);
         return redirect()->route('drivers.index');
     }
 
     public function restore($id)
     {
-        Driver::onlyTrashed()->find($id)->restore();
+        $this->driverRepository->restoreById($id);
         return redirect()->route('drivers.index');
     }
 }

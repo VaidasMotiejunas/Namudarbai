@@ -3,25 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use \config;
+use Illuminate\Http\RedirectResponse;
 
 class LanguageController extends Controller
 {
-    public function switch($language)
+    public function switch(string $language): RedirectResponse
     {
-        $uri_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-        $uri_segments = explode('/', $uri_path);
-        $localeFromURL = $uri_segments[3];
-        if (in_array($localeFromURL, config('app.locales'))){
-            app()->setLocale($localeFromURL);
+        if (session('locale')) {
+            session()->forget('locale');
         }
+        
+        session()->put('locale', $language);
+
         return redirect()->back();
     }
 }
-
-    // public function switch($language)
-    // {
-    //     app()->setLocale($language);
-        
-    //     return redirect()->route('drivers.index');
-    // }

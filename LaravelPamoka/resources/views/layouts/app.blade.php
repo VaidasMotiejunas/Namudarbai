@@ -44,7 +44,7 @@
                         <!-- Authentication Links -->
                         <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true">
-                                    Kalba <span class="caret"></span>
+                                    {{ session('locale') }} <span class="caret"></span>
                                 </a>
 
                                 <ul class="dropdown-menu">

@@ -2,7 +2,7 @@
 
 return [
     'date' => 'Data',
-    'number' => 'Numberis',
+    'number' => 'Numeris',
     'speed' => 'Greitis',
     'name' => 'Vardas',
     'city' => 'Miestas',

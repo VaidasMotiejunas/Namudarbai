@@ -29,7 +29,7 @@
         <input class="form-control" value="{{ old('name') }}" type="string" name="name" placeholder="Iveskite vairuotojo varda">
         <input class="form-control" value="{{ old('city') }}" type="string" name="city" placeholder="Iveskite miesta">
         <input class="form-control" value="{{ auth()->user()->id }}" type="hidden" name="user_id">
-        <input class="btn btn-outline-info btn-block" type="submit" value="Pridėti">
+        <input class="btn btn-outline-info btn-block" type="submit" value="{{ trans('buttons.add') }}">
     </form>
 </div>
 
