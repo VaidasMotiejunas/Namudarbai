@@ -9,11 +9,9 @@ class LanguageController extends Controller
 {
     public function switch($language)
     {
-        $uri_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-        $uri_segments = explode('/', $uri_path);
-        $localeFromURL = $uri_segments[3];
-        if (in_array($localeFromURL, config('app.locales'))){
-            app()->setLocale($localeFromURL);
+  
+        if (in_array($language, config('app.locales'))){
+            app()->setLocale($language);
         }
         return redirect()->back();
     }

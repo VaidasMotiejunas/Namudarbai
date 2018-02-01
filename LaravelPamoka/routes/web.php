@@ -27,6 +27,7 @@ Route::get('/en/register', function () { //Nesamone, bet suranda login jei atsij
 
 Auth::routes(); 
 
+Route::get('language/switch/{language}', 'LanguageController@switch')->name('language.switch');
 // Route::get('/home', 'HomeController@index')->name('home');
 
 // Route::resource('radars', 'RadarsController'); <---- GALIMA IR TAIP
@@ -52,10 +53,11 @@ Auth::routes();
 // Route::middleware('auth')->group(function(){
 // Route::prefix('{lang?}')->middleware(['locale', 'auth'])->group(function(){ //neveikia
 // Route::prefix('{lang?}')->middleware('auth')->group(function(){ Veikia tip kaip su middleware('locale') kodel?
-Route::prefix('{lang?}')->middleware('locale', 'auth')->group(function(){ //veikia, bet prastai
+Route::prefix('{lang?}')->middleware(['auth', 'locale'])->group(function(){ //veikia, bet prastai
 
+    
     // Route::resource('radars', 'RadarsController'); <---- GALIMA IR TAIP
-Route::get('radars', 'RadarsController@index')->name('radars.index');
+Route::get('radars', 'RadarsController@index')->name('radars.index_' . $language);
 Route::get('radars/create', 'RadarsController@create')->name('radars.create');
 Route::put('radars', 'RadarsController@store')->name('radars.store'); 
 Route::get('radars/{radar}/edit', 'RadarsController@edit')->name('radars.edit');
@@ -74,7 +76,6 @@ Route::delete('drivers/{driver}', 'DriversController@destroy')->name('drivers.de
 Route::post('drivers/{driver}', 'DriversController@restore')->name('drivers.restore');
 Route::get('drivers/{driver}', 'DriversController@show')->name('drivers.show');
 
-Route::get('/language/{language}', 'LanguageController@switch')->name('language.switch');
 
 Route::get('/', function () {
             return view('welcome');
